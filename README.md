@@ -87,20 +87,23 @@ Serve the Django application using this example command
 ## Screenshots
 
 ### Home Page
-![Home Page Screenshot](Srcs/Home.png)
+![Home Page Screenshot](Hive/Srcs/Home.png)
 
 ### Articles
-![VS Code Screenshot](Srcs/Articles.png)
+![VS Code Screenshot](Hive/Srcs/Articles.png)
 
 ### Article Page
-![Article Page Screenshot](Srcs/article-page.png)
+![Article Page Screenshot](Hive/Srcs/article-page.png)
 
 
 ## Future Changelogs
-- 🎯 **Version 1.1.0**: Add user authentication and profiles.
-- 🎯 **Version 1.2.0**: Implement advanced AI algorithms for more accurate trend analysis.
-- 🎯 **Version 2.0.0**: Expand the portal to include multimedia content such as videos and podcasts.
-- 🎯 **Version 2.1.0**: Integrate social media sharing features.
+- 🎯 **Version 1.1.0**: Optimize AI responses for accurate markdown rendering and link formatting.
+- 🎯 **Version 1.1.0**: Integrate intelligent image and media scraping for enhanced article referencing.
+- 🎯 **Version 1.1.1**: Deploy advanced AI algorithms to improve trend analysis precision.
+- 🎯 **Version 1.2.0**: Develop an automated mechanism for creating datasets to train deep learning models for fact-checking, news hosting, and news generation.
+- 🎯 **Version 2.0.0**: Introduce multimedia content including videos and podcasts to diversify news delivery.
+- 🎯 **Version 2.1.1**: Transition the website to production level and incorporate additional AI-powered features.
+- 🎯 **Version 2.1.2**: Automate and streamline data flow to ensure independent and efficient operations.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
