@@ -87,13 +87,13 @@ Serve the Django application using this example command
 ## Screenshots
 
 ### Home Page
-![Home Page Screenshot](Srcs/Home.png)
+![Home Page Screenshot](Hive/Srcs/Home.png)
 
 ### Articles
-![VS Code Screenshot](Srcs/Articles.png)
+![VS Code Screenshot](Hive/Srcs/Articles.png)
 
 ### Article Page
-![Article Page Screenshot](Srcs/article-page.png)
+![Article Page Screenshot](Hive/Srcs/article-page.png)
 
 
 ## Future Changelogs
