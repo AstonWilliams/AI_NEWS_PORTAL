@@ -1,0 +1,452 @@
+{% load markdown_deux_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Blog Template</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Add your styles here */
+    </style>
+</head>
+<body>
+    <div id="progress-bar"></div>
+    <header>
+        <div class="container">
+            <h1><span class="highlight">Pro</span> Blog</h1>
+            <nav>
+                <ul>
+                    <li class="current"><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Services</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="showcase">
+        <div class="container">
+            <h1>Professional Blog Template</h1>
+            <p>Your gateway to insightful content and engaging discussions</p>
+        </div>
+    </section>
+
+    <main class="container">
+        <article id="blog-article">
+            <h2>{{ blog_post.title }}</h2>
+            {% if blog_post.image_url %}
+                <img src="{{ blog_post.image_url }}" alt="{{ blog_post.title }}">
+            {% endif %}
+            <div>{{ blog_post.content|markdown }}</div>
+            <div>{{ blog_post.sources }}</div>
+        </article>
+    </main>
+
+    <div class="sharing-options">
+        <a href="https://twitter.com/intent/tweet?url={{ url|urlencode }}&text={{ title|urlencode }}" target="_blank" title="Share on X"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.reddit.com/submit?url={{ url|urlencode }}&title={{ title|urlencode }}" target="_blank" title="Share on Reddit"><i class="fab fa-reddit"></i></a>
+        <a href="https://api.whatsapp.com/send?text={{ url|urlencode }}" target="_blank" title="Share on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        <a href="#" onclick="navigator.clipboard.writeText('{{ url }}'); alert('Link copied to clipboard!');" title="Copy Link"><i class="fas fa-link"></i></a>
+    </div>    
+
+    <div class="floating-buttons">
+        <button id="theme-toggle" class="floating-button"><i class="fas fa-palette"></i></button>
+        <div class="theme-options">
+            <div class="theme-option" style="background-color: #333;" onclick="changeTheme('default')"></div>
+            <div class="theme-option" style="background-color: #000;" onclick="changeTheme('high-contrast')"></div>
+            <div class="theme-option" style="background-color: #121212;" onclick="changeTheme('dark')"></div>
+            <div class="theme-option" style="background-color: #f3e5ab;" onclick="changeTheme('creamy')"></div>
+            <div class="theme-option" style="background-color: #00a86b;" onclick="changeTheme('jade')"></div>
+        </div>
+        <button id="auto-scroll" class="floating-button"><i class="fas fa-angle-double-down"></i></button>
+        <button id="read-aloud" class="floating-button"><i class="fas fa-volume-up"></i></button>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Professional Blog Template. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Progress bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progress-bar').style.width = scrolled + '%';
+        });
+
+        // Theme changing
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeOptions = document.querySelector('.theme-options');
+
+        themeToggle.addEventListener('click', () => {
+            themeOptions.style.display = themeOptions.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        function changeTheme(theme) {
+            const root = document.documentElement;
+            switch(theme) {
+                case 'high-contrast':
+                    root.style.setProperty('--primary-color', '#000');
+                    root.style.setProperty('--secondary-color', '#fff');
+                    root.style.setProperty('--accent-color', '#ff0000');
+                    root.style.setProperty('--text-color', '#fff');
+                    root.style.setProperty('--background-color', '#000');
+                    break;
+                case 'dark':
+                    root.style.setProperty('--primary-color', '#121212');
+                    root.style.setProperty('--secondary-color', '#333');
+                    root.style.setProperty('--accent-color', '#bb86fc');
+                    root.style.setProperty('--text-color', '#fff');
+                    root.style.setProperty('--background-color', '#121212');
+                    break;
+                case 'creamy':
+                    root.style.setProperty('--primary-color', '#f3e5ab');
+                    root.style.setProperty('--secondary-color', '#fff8dc');
+                    root.style.setProperty('--accent-color', '#d2691e');
+                    root.style.setProperty('--text-color', '#8b4513');
+                    root.style.setProperty('--background-color', '#fffdd0');
+                    break;
+                case 'jade':
+                    root.style.setProperty('--primary-color', '#00a86b');
+                    root.style.setProperty('--secondary-color', '#f0fff0');
+                    root.style.setProperty('--accent-color', '#7fff00');
+                    root.style.setProperty('--text-color', '#006400');
+                    root.style.setProperty('--background-color', '#e0f8e0');
+                    break;
+                default:
+                    root.style.setProperty('--primary-color', '#333');
+                    root.style.setProperty('--secondary-color', '#f4f4f4');
+                    root.style.setProperty('--accent-color', '#4CAF50');
+                    root.style.setProperty('--text-color', '#333');
+                    root.style.setProperty('--background-color', '#ffffff');
+            }
+            themeOptions.style.display = 'none';
+        }
+
+        // Auto scroll
+        let isScrolling = false;
+        const autoScrollButton = document.getElementById('auto-scroll');
+        autoScrollButton.addEventListener('click', () => {
+            isScrolling = !isScrolling;
+            if (isScrolling) {
+                autoScrollButton.innerHTML = '<i class="fas fa-pause"></i>';
+                scrollPage();
+            } else {
+                autoScrollButton.innerHTML = '<i class="fas fa-angle-double-down"></i>';
+            }
+        });
+
+        function scrollPage() {
+            if (isScrolling) {
+                window.scrollBy(0, 1);
+                requestAnimationFrame(scrollPage);
+            }
+        }
+
+        // Read aloud
+        const synth = window.speechSynthesis;
+        let utterance = new SpeechSynthesisUtterance();
+        let isReading = false;
+        const readAloudButton = document.getElementById('read-aloud');
+
+        readAloudButton.addEventListener('click', () => {
+            if (!isReading) {
+                utterance.text = document.querySelector('article').textContent;
+                synth.speak(utterance);
+                isReading = true;
+                readAloudButton.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            } else {
+                synth.cancel();
+                isReading = false;
+                readAloudButton.innerHTML = '<i class="fas fa-volume-up"></i>';
+            }
+        });
+
+        utterance.onend = () => {
+            isReading = false;
+            readAloudButton.innerHTML = '<i class="fas fa-volume-up"></i>';
+        };
+
+        // Copy link functionality
+        document.querySelector('.sharing-options a[title="Copy Link"]').addEventListener('click', (e) => {
+            e.preventDefault();
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('Link copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy link: ', err);
+            });
+        });
+    </script>
+</body>
+</html>
+
+<style>
+    :root {
+        --primary-color: #333;
+        --secondary-color: #f4f4f4;
+        --accent-color: #4CAF50;
+        --text-color: #333;
+        --link-color: #1a73e8;
+        --background-color: #ffffff;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: var(--text-color);
+        background-color: var(--background-color);
+        margin: 0;
+        padding: 0;
+        transition: all 0.3s ease;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: auto;
+        overflow: hidden;
+    }
+
+    header {
+        background: var(--primary-color);
+        color: #fff;
+        padding: 1rem 0;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    header a {
+        color: #fff;
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+    }
+
+    header ul {
+        display: flex;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    header .highlight, header .current a {
+        color: var(--accent-color);
+        font-weight: bold;
+    }
+
+    #showcase {
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://source.unsplash.com/random/1600x900') no-repeat center center/cover;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: #fff;
+    }
+
+    #showcase h1 {
+        font-size: 4rem;
+        margin-bottom: 0;
+    }
+
+    #showcase p {
+        font-size: 1.5rem;
+        margin-top: 0;
+    }
+
+    main {
+        padding: 2rem 0;
+    }
+
+    article {
+        background: var(--background-color);
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    article img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin: 1rem 0;
+    }
+
+    .caption {
+        text-align: center;
+        font-style: italic;
+        color: var(--text-color);
+        opacity: 0.8;
+        margin-bottom: 1rem;
+    }
+
+    blockquote {
+        background: var(--secondary-color);
+        border-left: 5px solid var(--accent-color);
+        margin: 1.5rem 0;
+        padding: 1rem;
+        font-style: italic;
+    }
+
+    .interactive-card {
+        background: var(--secondary-color);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        transition: all 0.3s ease;
+    }
+
+    .interactive-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    .interactive-card button {
+        background: var(--accent-color);
+        color: #fff;
+        border: none;
+        padding: 0.5rem 1rem;
+        margin: 0.5rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .interactive-card button:hover {
+        background: var(--primary-color);
+    }
+
+    .sharing-options {
+        position: fixed;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .sharing-options a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        margin: 5px 0;
+        background: var(--primary-color);
+        color: #fff;
+        border-radius: 50%;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .sharing-options a:hover {
+        background: var(--accent-color);
+        transform: scale(1.1);
+    }
+
+    footer {
+        background: var(--primary-color);
+        color: #fff;
+        text-align: center;
+        padding: 2rem 0;
+        margin-top: 2rem;
+    }
+
+    #progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 4px;
+        background: var(--accent-color);
+        width: 0%;
+        z-index: 1001;
+        transition: width 0.2s ease-out;
+    }
+
+    .floating-buttons {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .floating-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50px;
+        height: 50px;
+        margin: 5px 0;
+        background: var(--accent-color);
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .floating-button:hover {
+        background: var(--primary-color);
+        transform: scale(1.1);
+    }
+
+    .theme-options {
+        display: none;
+        position: absolute;
+        right: 60px;
+        bottom: 0;
+    }
+
+    .theme-option {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        margin: 0 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .theme-option:hover {
+        transform: scale(1.2);
+    }
+
+    @media(max-width: 768px) {
+        header .container {
+            flex-direction: column;
+        }
+
+        header ul {
+            margin-top: 1rem;
+        }
+
+        #showcase h1 {
+            font-size: 3rem;
+        }
+
+        .sharing-options {
+            display: none;
+        }
+
+        .floating-buttons {
+            right: 10px;
+            bottom: 10px;
+        }
+    }
+</style>

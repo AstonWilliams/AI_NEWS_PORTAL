@@ -1,0 +1,406 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegant Insights | Home</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Add your styles here */
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">Elegant Insights</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#featured">Featured</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h1>Welcome to Elegant Insights</h1>
+                <p>Discover thought-provoking articles and stay ahead of the curve</p>
+                <a href="#featured" class="btn">Explore Featured Posts</a>
+            </div>
+        </section>
+
+        <section id="featured" class="featured-posts">
+            <div class="container">
+                <h2>Featured Posts</h2>
+                <div id="post-grid" class="post-grid">
+                    <!-- Dynamic content will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="about-section">
+            <div class="container">
+                <div class="about-content">
+                    <div class="about-text">
+                        <h2>About Elegant Insights</h2>
+                        <p>We are passionate about bringing you the most insightful and thought-provoking content across various fields. Our team of expert writers and researchers work tirelessly to keep you informed and inspired.</p>
+                        <p>Join us on this journey of discovery and stay ahead of the curve with Elegant Insights.</p>
+                    </div>
+                    <div class="about-image">
+                        <img src="https://source.unsplash.com/random/600x400?writing" alt="About Elegant Insights">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contact">
+        <div class="container">
+            <p>&copy; 2025 Elegant Insights. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Simple parallax effect for hero section
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.pageYOffset;
+            document.querySelector('.hero').style.backgroundPositionY = scrollPosition * 0.7 + 'px';
+        });
+
+        // Lazy loading images
+        document.addEventListener("DOMContentLoaded", function() {
+            var lazyImages = [].slice.call(document.querySelectorAll("img.lazy"));
+
+            if ("IntersectionObserver" in window) {
+                let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            let lazyImage = entry.target;
+                            lazyImage.src = lazyImage.dataset.src;
+                            lazyImage.classList.remove("lazy");
+                            lazyImageObserver.unobserve(lazyImage);
+                        }
+                    });
+                });
+
+                lazyImages.forEach(function(lazyImage) {
+                    lazyImageObserver.observe(lazyImage);
+                });
+            }
+        });
+
+        // Get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+
+        // AJAX request to load dynamic content
+        $(document).ready(function() {
+            console.log("Starting to load articles...");
+            $.ajax({
+                url: "/load-articles/",
+                type: "GET",
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    console.log("CSRF token set.");
+                },
+                success: function(data) {
+                    console.log("Data loaded:", data);
+                    var articles = data.articles;
+                    var postGrid = $('#post-grid');
+                    
+                    articles.forEach(function(article) {
+                        var postCard = `
+                            <article class="post-card">
+                                <div class="post-image" style="background-image: url('${article.image_url}');"></div>
+                                <div class="post-content">
+                                    <h3>${article.title}</h3>
+                                    <p>${article.content.substring(0, 100)}...</p>
+                                    <a href="/render-blog-post/${article.id}/" class="read-more">Read More</a>
+                                </div>
+                            </article>
+                        `;
+                        postGrid.append(postCard);
+                    });
+                    console.log("Articles loaded and displayed.");
+                },
+                error: function(error) {
+                    console.error("Error loading articles:", error);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+<style>
+    :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #ecf0f1;
+        --accent-color: #e74c3c;
+        --text-color: #34495e;
+        --background-color: #ffffff;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: var(--text-color);
+        background-color: var(--background-color);
+    }
+
+    .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    header {
+        background: var(--primary-color);
+        color: var(--secondary-color);
+        padding: 1rem 0;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    .nav-links {
+        display: flex;
+        list-style: none;
+    }
+
+    .nav-links li {
+        margin-left: 20px;
+    }
+
+    .nav-links a {
+        color: var(--secondary-color);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+        color: var(--accent-color);
+    }
+
+    .hero {
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://source.unsplash.com/random/1600x900?nature') no-repeat center center/cover;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        color: var(--secondary-color);
+    }
+
+    .hero-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .hero h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .hero p {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+    }
+
+    .btn {
+        display: inline-block;
+        background: var(--accent-color);
+        color: var(--secondary-color);
+        padding: 0.75rem 1.5rem;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: #c0392b;
+    }
+
+    .featured-posts {
+        padding: 4rem 0;
+        background-color: var(--secondary-color);
+    }
+
+    .featured-posts h2 {
+        text-align: center;
+        margin-bottom: 2rem;
+        font-size: 2rem;
+        color: var(--primary-color);
+    }
+
+    .post-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .post-card {
+        background-color: var(--background-color);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .post-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .post-image {
+        height: 200px;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .post-content {
+        padding: 1.5rem;
+    }
+
+    .post-content h3 {
+        margin-bottom: 0.5rem;
+        color: var(--primary-color);
+    }
+
+    .post-content p {
+        margin-bottom: 1rem;
+    }
+
+    .read-more {
+        color: var(--accent-color);
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .about-section {
+        padding: 4rem 0;
+        background-color: var(--primary-color);
+        color: var(--secondary-color);
+    }
+
+    .about-content {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    .about-text {
+        flex: 1;
+    }
+
+    .about-image {
+        flex: 1;
+        max-width: 400px;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .about-image img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    footer {
+        background-color: var(--primary-color);
+        color: var(--secondary-color);
+        text-align: center;
+        padding: 2rem 0;
+    }
+
+    .social-links {
+        margin-top: 1rem;
+    }
+
+    .social-links a {
+        color: var(--secondary-color);
+        font-size: 1.5rem;
+        margin: 0 10px;
+        transition: color 0.3s ease;
+    }
+
+    .social-links a:hover {
+        color: var(--accent-color);
+    }
+
+    @media (max-width: 768px) {
+        .nav-links {
+            display: none;
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+        }
+
+        .hero p {
+            font-size: 1rem;
+        }
+
+        .about-content {
+            flex-direction: column;
+        }
+
+        .about-image {
+            max-width: 100%;
+        }
+    }
+</style>
