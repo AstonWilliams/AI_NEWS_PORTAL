@@ -97,10 +97,14 @@ Serve the Django application using this example command
 
 
 ## Future Changelogs
-- 🎯 **Version 1.1.0**: Add user authentication and profiles.
-- 🎯 **Version 1.2.0**: Implement advanced AI algorithms for more accurate trend analysis.
+- 🎯 **Version 1.1.0**: Fix Ai responses for markdown rendering and links
+- 🎯 **Version 1.1.0**: Intelligent Images and other media Scrapping for referencing in Articles.
+- 🎯 **Version 1.1.1**: Implement advanced AI algorithms for more accurate trend analysis.
+- 🎯 **Version 1.2.0**: Implement A mechanism that automates dataset creation for a deep learning model for fact checking,news host,news creation,etc.
 - 🎯 **Version 2.0.0**: Expand the portal to include multimedia content such as videos and podcasts.
-- 🎯 **Version 2.1.0**: Integrate social media sharing features.
+- 🎯 **Version 2.1.1**: Expand the website to production level incorporate more Ai-powered features.
+- 🎯 **Version 2.1.2**: Automate and enhance the Data flow make it independent.
+
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
