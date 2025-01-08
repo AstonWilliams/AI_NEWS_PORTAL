@@ -1,5 +1,5 @@
 
-# AI-Powered News Portal
+# AI-Powered News Portal [![AI_NEWS_PORTAL](Hive\Srcs\logo.svg)](https://github.com/AstonWilliams/AI_NEWS_PORTAL)
 
 Built on Django and powered by AI, this News Portal creates live news articles on trending topics. It can be extended to create a whole AI-powered news platform, fetching live data from Google Trends.
 
