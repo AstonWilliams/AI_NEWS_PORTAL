@@ -72,13 +72,15 @@ def generate_blog_post(feed):
 
     # Generate the prompt for the AI with the required details
     prompt_message = (
-        f"Generate a engaging professional and informal and appropriate tone crafted informational yet engaging blog post with rich professional markdown formatting italics,quotes,links to sources,embeded images from unsplash,etc using the following structure and given information:\n"
+        f"""Generate a engaging professional and informal and appropriate tone crafted informational yet engaging blog post 
+        with rich professional markdown formatting italics,quotes,links to sources,embeded images from unsplash,etc using ,use words with encoded urls and follow
+        the following structure and given information:\n"""
         f"Title: {topic}\n"
         "Introduction: Introductory paragraph on the topic\n"
         "Discussion: Detailed discussion on the topic\n"
         "Final Note: A concluding note\n"
         "Conclusion: A summary of the topic\n"
-        f"Sources: {', '.join(news_item_urls)}\n"
+        f"Sources(INCLUDE WORDS having embedded links): {', '.join(news_item_urls)}\n"
         "Please use the included urls for more information on writing the article"
     )
 
@@ -136,7 +138,7 @@ def refresh_data():
     scrape_rss_feed()
 
     # Generate blog posts for the latest 5 unused RSS feed entries
-    rss_feeds = RSSFeed.objects.filter(used=False).order_by('-published')[:3]
+    rss_feeds = RSSFeed.objects.filter(used=False).order_by('-published')[:1]
     for feed in rss_feeds:
         generate_blog_post(feed)
 
@@ -144,7 +146,7 @@ def home(request):
     last_fetch_time = request.session.get('last_fetch_time')
     current_time = timezone.now()
 
-    if not last_fetch_time or current_time - datetime.fromisoformat(last_fetch_time) >= timedelta(minutes=2):
+    if not last_fetch_time or current_time - datetime.fromisoformat(last_fetch_time) >= timedelta(minutes=1):
         refresh_data()
         request.session['last_fetch_time'] = current_time.isoformat()
         print(f"Data refreshed at: {current_time}")
